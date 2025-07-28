@@ -4,6 +4,7 @@ import axios from "axios";
 import { Card } from '../../Components/Card';
 import { Cabecalho } from "../../Components/Cabecalho";
 import { Footer } from "../../Components/Footer";
+import TelaProduto from "../TelaProduto/TelaProduto";
 
 interface Produto {
   id: number;
@@ -16,6 +17,7 @@ interface Produto {
 export default function Home() {
   const Produtos_URL = "https://dummyjson.com/products";
   const [produtos, setProdutos] = useState<Produto[]>([]);
+  const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
   const [atualPagina, setAtualPagina] = useState(1);
   const quantidadePorPagina = 10;
 
@@ -40,11 +42,17 @@ export default function Home() {
       </section>
       <ul className="flex flex-wrap justify-center gap-6 p-6">
         {produtosAmostra.map((produto) => (
-          <Card key={produto.id} produto={produto} />
+          <div key={produto.id} onClick={() => setProdutoSelecionado(produto)}>
+            <Card produto={produto} />
+          </div>
         ))}
       </ul>
 
-      {/* Paginação */}
+      {produtoSelecionado && (
+        <TelaProduto produto={produtoSelecionado} onClose={() => setProdutoSelecionado(null)} />
+      )}
+
+     
       <div className="flex justify-center gap-2 mt-4 mb-10">
         {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((num) => (
           <button
