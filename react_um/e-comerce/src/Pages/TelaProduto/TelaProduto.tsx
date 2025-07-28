@@ -1,3 +1,9 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Cabecalho } from "../../Components/Cabecalho";
+import { Footer } from "../../Components/Footer";
+
 interface Produto {
   id: number;
   title: string;
@@ -6,58 +12,51 @@ interface Produto {
   images: string[];
 }
 
-interface ProdutosProps {
-  produto: Produto;
-  onClose: () => void;
-}
+export default function TelaProduto() {
+  const { id } = useParams<{ id: string }>();
+  const [produto, setProduto] = useState<Produto | null>(null);
+  const navigate = useNavigate();
 
-export default function TelaProduto({ produto, onClose }: ProdutosProps) {
-  const handleComprar = () => {
-    alert("Compra bem-sucedida!");
-    onClose();
-  };
+  useEffect(() => {
+    if (!id) return;
+    axios.get(`https://dummyjson.com/products/${id}`).then((response) => {
+      setProduto(response.data);
+    });
+  }, [id]);
+
+  if (!produto) return;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md relative shadow-lg">
+    <>
+      <Cabecalho/>
+      <section>
+        <h2 className="flex justify-center font-bold mb-10 md:text-2xl text-pink-900 bg-pink-50 h-20 items-center">INFORMAÇÃO DO PRODUTO: {produto.title}</h2>
+      </section>
+      <div className="p-4">
         <button
-          className="absolute top-2 right-4 text-gray-400 hover:text-red-500 text-xl"
-          onClick={onClose}
+          onClick={() => navigate(-1)}
+          className="mb-4 px-3 py-1 hover:text-pink-900 hover:shadow-lg hover:bg-pink-200 hover:font-bold bg-pink-900 text-white rounded"
         >
-          &times;
+          Voltar
         </button>
 
-        <img
-          src={produto.images[0]}
-          alt={produto.title}
-          className="w-full h-64 object-cover rounded mb-4"
-        />
-
-        <input
-          type="text"
-          className="border p-2 w-full mb-2"
-          value={produto.title}
-          readOnly
-        />
-        <textarea
-          className="border p-2 w-full mb-2"
-          value={produto.description}
-          readOnly
-        />
-        <input
-          type="number"
-          className="border p-2 w-full mb-4"
-          value={produto.price}
-          readOnly
-        />
-
-        <button
-          onClick={handleComprar}
-          className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 w-full"
-        >
-          Comprar Agora
-        </button>
+        <section className="flex w-full">
+          <div className="bg-pink-50 w-130 ml-34 rounded-4xl flex items-center justify-center flex-col ">
+            <img
+            src={produto.images[0]}
+            alt={produto.title}
+            className="w-80 h-80 object-cover mb-4 flex items-center justify-center"/>
+            <h1 className="text-xl font-bold mb-2">{produto.title}</h1>
+          </div>
+          <div className="flex flex-col gap-10 w-90 justify-center ml-10">
+            <p className="mb-2 font-semibold">{produto.description}</p>
+            <p className=" flex font-bold text-lg text-green-100 bg-green-600 w-23 justify-center rounded-4xl  hover:shadow-lg">R$ {produto.price}</p>
+          </div>
+          
+          
+        </section>
       </div>
-    </div>
+      <Footer/>
+    </>
   );
 }
