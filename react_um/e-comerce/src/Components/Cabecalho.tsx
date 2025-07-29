@@ -1,10 +1,10 @@
-
+	
 export function Cabecalho() {
 
       return(
         <>
           <header className="flex justify-center items-center w-full h-11 bg-pink-200">
-                <h2 className=" text-pink-900 font-extrabold">SEJA BEM-VINDO AO MERCADO DA KAMIS</h2>
+            <h2 className=" text-pink-900 font-extrabold">SEJA BEM-VINDO AO MERCADO DA KAMIS</h2>
           </header>
         </>
       );

@@ -1,20 +1,23 @@
-import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router";
+import { useState } from "react"; //gerencia o estado do componente
+import axios from "axios"; //requisição http
+import { useNavigate } from "react-router"; //navegar com o react router
 import { Cabecalho } from "../../Components/Cabecalho";
 import { Footer } from "../../Components/Footer";
 function Login() {
+  //armazenar
 	const [username, setUsername] = useState<string>();
 	const [password, setPassword] = useState<string>();
 	const [error, setError] = useState<string>();
-	const navigate = useNavigate();
-
+	const navigate = useNavigate(); //navegar apos login
+  //funcao para realizar login
 	const logar = async () => {
 		try {
+      //puxa os dados da api
 			await axios.post("https://dummyjson.com/auth/login", {
 				username: username,
 				password: password,
 			});
+      //redireciona para rota se der tudo certo
 			navigate("/home");
 		} catch (error) {
 			setError("Credenciais inválidas");
@@ -24,7 +27,7 @@ function Login() {
 	return (
 		<>
       <section className="flex flex-col w-full justify-between items-center h-screen">
-			<Cabecalho />
+			  <Cabecalho />
         <div className="shadow-lg bg-gray-100 flex justify-center items-center w-96 h-80 rounded-md flex-col ">
 
           <h2 className="text-xl text-pink-900 font-extrabold">Login</h2>
@@ -62,7 +65,7 @@ function Login() {
             Logar
           </button>
         </div>
-			<Footer/>
+			  <Footer/>
       </section>
 		</>
 	);
